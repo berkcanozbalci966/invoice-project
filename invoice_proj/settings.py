@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'profiles',
     'receivers',
-    'invoices'
+    'invoices',
+    'positions'
 ]
 
 MIDDLEWARE = [
