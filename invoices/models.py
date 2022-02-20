@@ -23,13 +23,20 @@ class Invoice(models.Model):
     # if closed - hide add positions and ubable adding new ones
     closed = models.BooleanField(default=False)
     # for educational purposes only
-    tag = models.ManyToManyField(Tag,blank=True)
+    tags = models.ManyToManyField(Tag,blank=True)
 
     def __str__(self):
         return f"Invoice number: {self.number}, pk: {self.pk}"
 
+    def get_tags(self):
+        return self.tags.all()
+
     def get_positions(self):
-        pass
+        return self.position_set.all()
 
     def get_total_amount(self):
-        pass
+        total = 0
+        qs = self.get_positions()
+        for pos in qs:
+            total += pos.amount
+        return total
