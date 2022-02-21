@@ -14,7 +14,7 @@ class Profile(models.Model):
     company_name = models.CharField(max_length=220)
     company_info = models.TextField()
     created =  models.DateTimeField( auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True)
 
     # add later 
     # avatar = 
