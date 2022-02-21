@@ -34,10 +34,11 @@ class Invoice(models.Model):
     @property
     def positions(self):
         return self.position_set.all()
+        
     @property
     def total_amount(self):
         total = 0
-        qs = self.positions()
+        qs = self.positions
         for pos in qs:
             total += pos.amount
         return total
