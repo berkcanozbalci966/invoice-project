@@ -1,5 +1,6 @@
 from django import forms
 from .models import Invoice
+from django.core.exceptions import ValidationError
 
 
 class InvoiceForm(forms.ModelForm):
@@ -17,3 +18,13 @@ class InvoiceForm(forms.ModelForm):
                   'completion_date',
                   'issue_date',
                   'payment_date')
+        labels = {
+            'receiver': 'test1',
+            'number': 'test2'
+        }
+
+    def clean_number(self):
+        number = self.cleaned_data.get('number')
+        if len(number) < 10:
+            raise ValidationError('Number is too short')
+        return number
