@@ -1,8 +1,13 @@
 import profile
+
+from django.urls import reverse_lazy
 from profiles.models import Profile
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
+from django.views.generic import (
+    ListView,
+    FormView)
 from .models import Invoice
+from .forms import InvoiceForm
 # Create your views here.
 
 
@@ -20,3 +25,16 @@ class InvoiceListView(ListView):
         # return qs
 
         return super().get_queryset().filter(profile=profile).order_by('-created')
+
+
+class InvoiceFormView(FormView):
+    form_class = InvoiceForm
+    template_name = 'invoices/create.html'
+    success_url = reverse_lazy('invoices:main')
+
+    def form_valid(self, form):
+        profile = Profile.objects.get(user=self.request.user)
+        instance = form.save(commit=False)
+        instance.profile = profile
+        form.save()
+        return super().form_valid(form)

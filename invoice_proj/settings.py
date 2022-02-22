@@ -41,9 +41,12 @@ INSTALLED_APPS = [
     'receivers',
     'invoices',
     'positions',
-    #3rd party
-    'import_export'
+    # 3rd party
+    'import_export',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
