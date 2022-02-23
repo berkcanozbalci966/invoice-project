@@ -7,9 +7,11 @@ from django.views.generic import (
     ListView,
     FormView,
     TemplateView,
-    DetailView)
+    DetailView,
+    UpdateView)
 from .models import Invoice
 from .forms import InvoiceForm
+from django.contrib import messages
 # Create your views here.
 
 
@@ -54,3 +56,15 @@ class SimpleTemplateView(DetailView):
 
 # class SimpleTemplateView(TemplateView):
 #     template_name = 'invoices/simple_template.html'
+
+class InvoiceUpdateView(UpdateView):
+    model = Invoice
+    template_name = 'invoices/update.html'
+    form_class = InvoiceForm
+    success_url = reverse_lazy('invoices:main')
+
+    def form_valid(self, form):
+        instance = form.save()
+        messages.info(
+            self.request, f'Successfuly updated invoice - {instance.number}')
+        return super().form_valid(form)
