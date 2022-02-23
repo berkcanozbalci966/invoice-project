@@ -7,7 +7,6 @@
         {% for message in messages  %}
             {% if message.tags == 'info' %}<div class="alert alert-primary mt-2">{{ message }}</div>{% endif %}
         {% endfor %}
-    {% else %}
     {% endif %}
     {% if qs %}
         {% for  object in qs  %}
