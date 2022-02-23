@@ -20,9 +20,6 @@ class Profile(models.Model):
 
     avatar = models.ImageField(default='images/avatar.png')
     company_logo = models.ImageField(default='images/no_photo.png')
-    # add later
-    # avatar =
-    # company_logo =
 
     def __str__(self):
         return f"Profile of the user: {self.user.username}"

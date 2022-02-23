@@ -11,6 +11,7 @@ from django.views.generic import (
     UpdateView)
 from .models import Invoice
 from .forms import InvoiceForm
+from positions.forms import PositionForm
 from django.contrib import messages
 # Create your views here.
 
@@ -38,7 +39,7 @@ class InvoiceFormView(FormView):
     i_instance = None
 
     def get_success_url(self):
-        return reverse('invoices:simple-template', kwargs={'pk': self.i_instance.pk})
+        return reverse('invoices:detail', kwargs={'pk': self.i_instance.pk})
 
     def form_valid(self, form):
         profile = Profile.objects.get(user=self.request.user)
@@ -56,6 +57,32 @@ class SimpleTemplateView(DetailView):
 
 # class SimpleTemplateView(TemplateView):
 #     template_name = 'invoices/simple_template.html'
+
+class AddPositionsFormView(FormView):
+    form_class = PositionForm
+    template_name = "invoices/detail.html"
+
+    def get_success_url(self):
+        return self.request.path
+
+    def form_valid(self, form):
+        invoice_pk = self.kwargs.get('pk')
+        invoice_object = Invoice.objects.get(pk=invoice_pk)
+        instance = form.save(commit=False)
+        instance.invoice = invoice_object
+        form.save()
+        messages.info(
+            self.request, f'Successfully added position - {instance.title}')
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        invoice_object = Invoice.objects.get(pk=self.kwargs.get('pk'))
+        qs = invoice_object.positions
+        context['object'] = invoice_object
+        context['qs'] = qs
+        return context
+
 
 class InvoiceUpdateView(UpdateView):
     model = Invoice

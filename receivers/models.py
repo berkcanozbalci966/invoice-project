@@ -11,8 +11,5 @@ class Receiver(models.Model):
 
     logo = models.ImageField(default='images/no_photo.png')
 
-    # add later
-    # logo
-
     def __str__(self):
         return str(self.name)
