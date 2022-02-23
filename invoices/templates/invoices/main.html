@@ -12,7 +12,8 @@
                         <div class="card-text">Completion Date: {{ object.completion_date }}</div>
                         <div class="text-muted">Amount: ${{ object.total_amount }}</div>
                         <div class="mt-2">
-                            <a href="#" class="btn btn-primary">details</a>
+                            <a href="{% url 'invoices:simple-template' object.pk %}"
+                               class="btn btn-primary">details</a>
                             <a href="#" class="btn btn-info">update</a>
                         </div>
                     </div>

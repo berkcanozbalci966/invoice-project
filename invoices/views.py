@@ -6,7 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import (
     ListView,
     FormView,
-    TemplateView)
+    TemplateView,
+    DetailView)
 from .models import Invoice
 from .forms import InvoiceForm
 # Create your views here.
@@ -46,5 +47,10 @@ class InvoiceFormView(FormView):
         return super().form_valid(form)
 
 
-class SimpleTemplateView(TemplateView):
+class SimpleTemplateView(DetailView):
+    model = Invoice
     template_name = 'invoices/simple_template.html'
+
+
+# class SimpleTemplateView(TemplateView):
+#     template_name = 'invoices/simple_template.html'
