@@ -42,10 +42,9 @@
                             data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
-                <div class="modal-body">...</div>
+                <div class="modal-body">Are you sure you want to close the invoice</div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <a href="{% url 'invoices:close' object.pk %}" class="btn btn-secondary">Close</a>
                 </div>
             </div>
         </div>
@@ -97,6 +96,8 @@
                                 <td>
                                     <a href="#" class="btn btn-danger">x</a>
                                 </td>
+                            {% else %}
+                                <td>closed</td>
                             {% endif %}
                         </tr>
                     {% endfor %}

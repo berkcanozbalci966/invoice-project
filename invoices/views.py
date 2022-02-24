@@ -8,7 +8,8 @@ from django.views.generic import (
     FormView,
     TemplateView,
     DetailView,
-    UpdateView)
+    UpdateView,
+    RedirectView)
 from .models import Invoice
 from .forms import InvoiceForm
 from positions.forms import PositionForm
@@ -95,3 +96,18 @@ class InvoiceUpdateView(UpdateView):
         messages.info(
             self.request, f'Successfuly updated invoice - {instance.number}')
         return super().form_valid(form)
+
+
+class CloseInvoiceView(RedirectView):
+
+    pattern_name = "invoices:detail"
+
+    print('hello')
+
+    def get_redirect_url(self, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        obj = Invoice.objects.get(pk=pk)
+        obj.closed = True
+        obj.save()
+        print(obj)
+        return super().get_redirect_url(*args, **kwargs)
