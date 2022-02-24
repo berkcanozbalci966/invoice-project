@@ -62,7 +62,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#closeInoiceModal">close</button>
         {% else %}
-            <a href="#" class="btn btn-danger">pdf</a>
+            <a href="{% url 'invoices:pdf' object.pk %}" class="btn btn-danger">pdf</a>
         {% endif %}
     </div>
     {% if messages %}

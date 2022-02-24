@@ -1,3 +1,9 @@
+import os
+from django.contrib.staticfiles import finders
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.http import HttpResponse
+from django.conf import settings
 from email import message
 from django.urls import (
     reverse_lazy,
@@ -132,3 +138,35 @@ class InvoicePositionDeleteView(LoginRequiredMixin, InvoiceNotClosedMixin, Delet
     def get_success_url(self):
         messages.info(self.request, f'Delete Position - {self.object.title}')
         return reverse('invoices:detail', kwargs={'pk': self.object.invoice.id})
+
+
+def invoice_pdf_view(request, **kwargs):
+
+    pk = kwargs.get('pk')
+    object = Invoice.objects.get(pk=pk)
+
+    logo_result = finders.find('img/logo.png')
+    font_result = finders.find('fonts/Oswald-Regular.ttf')
+    searched_locations = finders.searched_locations
+    print(searched_locations)
+
+    template_path = 'invoices/pdf.html'
+    context = {'object': object,
+               'static': {
+                   'font': font_result,
+                   'logo': logo_result
+               }}
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html.encode('utf-8'), dest=response, encoding='utf-8')
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

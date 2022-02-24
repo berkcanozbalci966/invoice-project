@@ -7,8 +7,10 @@ from .views import (
     InvoiceUpdateView,
     AddPositionsFormView,
     CloseInvoiceView,
-    InvoicePositionDeleteView
+    InvoicePositionDeleteView,
+    invoice_pdf_view
 )
+
 
 app_name = 'invoices'
 
@@ -21,4 +23,5 @@ urlpatterns = [
     path('<pk>/update/', InvoiceUpdateView.as_view(), name='update'),
     path('<pk>/delete/<int:position_pk>/',
          InvoicePositionDeleteView.as_view(), name='position-delete'),
+    path('<pk>/pdf/', invoice_pdf_view, name="pdf")
 ]
