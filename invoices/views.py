@@ -14,14 +14,16 @@ from django.views.generic import (
     DeleteView
 )
 from .models import Invoice
+from positions.models import Position
 from .forms import InvoiceForm
 from positions.forms import PositionForm
 from django.contrib import messages
-from positions.models import Position
+from .mixins import InvoiceNotClosedMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 
-class InvoiceListView(ListView):
+class InvoiceListView(LoginRequiredMixin, ListView):
     model = Invoice
     template_name = "invoices/main.html"  # default invoice_list.html
     paginate_by = 3
@@ -37,7 +39,7 @@ class InvoiceListView(ListView):
         return super().get_queryset().filter(profile=profile).order_by('-created')
 
 
-class InvoiceFormView(FormView):
+class InvoiceFormView(LoginRequiredMixin, FormView):
     form_class = InvoiceForm
     template_name = 'invoices/create.html'
     # success_url = reverse_lazy('invoices:main')
@@ -55,7 +57,7 @@ class InvoiceFormView(FormView):
         return super().form_valid(form)
 
 
-class SimpleTemplateView(DetailView):
+class SimpleTemplateView(LoginRequiredMixin, DetailView):
     model = Invoice
     template_name = 'invoices/simple_template.html'
 
@@ -63,7 +65,7 @@ class SimpleTemplateView(DetailView):
 # class SimpleTemplateView(TemplateView):
 #     template_name = 'invoices/simple_template.html'
 
-class AddPositionsFormView(FormView):
+class AddPositionsFormView(LoginRequiredMixin, FormView):
     form_class = PositionForm
     template_name = "invoices/detail.html"
 
@@ -89,7 +91,7 @@ class AddPositionsFormView(FormView):
         return context
 
 
-class InvoiceUpdateView(UpdateView):
+class InvoiceUpdateView(LoginRequiredMixin, InvoiceNotClosedMixin, UpdateView):
     model = Invoice
     template_name = 'invoices/update.html'
     form_class = InvoiceForm
@@ -102,7 +104,7 @@ class InvoiceUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class CloseInvoiceView(RedirectView):
+class CloseInvoiceView(LoginRequiredMixin, RedirectView):
 
     pattern_name = "invoices:detail"
 
@@ -117,7 +119,7 @@ class CloseInvoiceView(RedirectView):
         return super().get_redirect_url(*args, **kwargs)
 
 
-class InvoicePositionDeleteView(DeleteView):
+class InvoicePositionDeleteView(LoginRequiredMixin, InvoiceNotClosedMixin, DeleteView):
     model = Position
     template_name = 'invoices/position_confirm_delete.html'
 
