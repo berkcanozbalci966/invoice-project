@@ -6,7 +6,11 @@
     <form action="" method="post">
         {% csrf_token %}
         <p>
-            Are You sure? Please think about that {{ object }}
+            Are You sure? Please think about that
+            <b>
+                "{{ object.title }}"
+            </b>
+            ?
         </p>
         <button type="submit" class="btn btn-primary">Yeah</button>
     </form>

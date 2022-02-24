@@ -18,7 +18,10 @@
                         <div class="text-muted">Amount: ${{ object.total_amount }}</div>
                         <div class="mt-2">
                             <a href="{% url 'invoices:detail' object.pk %}" class="btn btn-primary">details</a>
-                            <a href="{% url 'invoices:update' object.pk %}" class="btn btn-info">update</a>
+                            {% if not object.closed %}
+                                <a href="{% url 'invoices:update' object.pk %}" class="btn btn-info">update</a>
+                            {% else %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -19,6 +19,6 @@ urlpatterns = [
     path('<pk>', AddPositionsFormView.as_view(), name='detail'),
     path('<pk>/close/', CloseInvoiceView.as_view(), name='close'),
     path('<pk>/update/', InvoiceUpdateView.as_view(), name='update'),
-    path('<pk>/update/<int:position_pk>/',
+    path('<pk>/delete/<int:position_pk>/',
          InvoicePositionDeleteView.as_view(), name='position-delete'),
 ]
