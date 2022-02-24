@@ -6,7 +6,8 @@ from .views import (
     InvoiceFormView,
     InvoiceUpdateView,
     AddPositionsFormView,
-    CloseInvoiceView
+    CloseInvoiceView,
+    InvoicePositionDeleteView
 )
 
 app_name = 'invoices'
@@ -17,5 +18,7 @@ urlpatterns = [
     # path('<pk>', SimpleTemplateView.as_view(), name='simple-template'),
     path('<pk>', AddPositionsFormView.as_view(), name='detail'),
     path('<pk>/close/', CloseInvoiceView.as_view(), name='close'),
-    path('<pk>/update/', InvoiceUpdateView.as_view(), name='update')
+    path('<pk>/update/', InvoiceUpdateView.as_view(), name='update'),
+    path('<pk>/update/<int:position_pk>/',
+         InvoicePositionDeleteView.as_view(), name='position-delete'),
 ]

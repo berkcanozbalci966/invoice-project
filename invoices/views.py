@@ -1,3 +1,4 @@
+from email import message
 from django.urls import (
     reverse_lazy,
     reverse)
@@ -9,11 +10,14 @@ from django.views.generic import (
     TemplateView,
     DetailView,
     UpdateView,
-    RedirectView)
+    RedirectView,
+    DeleteView
+)
 from .models import Invoice
 from .forms import InvoiceForm
 from positions.forms import PositionForm
 from django.contrib import messages
+from positions.models import Position
 # Create your views here.
 
 
@@ -111,3 +115,18 @@ class CloseInvoiceView(RedirectView):
         obj.save()
         print(obj)
         return super().get_redirect_url(*args, **kwargs)
+
+
+class InvoicePositionDeleteView(DeleteView):
+    model = Position
+    template_name = 'invoices/position_confirm_delete.html'
+
+    # /<pk>/delete/<position_pk>/
+    def get_object(self):
+        pk = self.kwargs.get('position_pk')
+        object = Position.objects.get(pk=pk)
+        return object
+
+    def get_success_url(self):
+        messages.info(self.request, f'Delete Position - {self.object.title}')
+        return reverse('invoices:detail', kwargs={'pk': self.object.invoice.id})
